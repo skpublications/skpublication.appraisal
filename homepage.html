@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SK Publication Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #eef2f7;
+}
+
+header {
+    background: #1a2a44;
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.container {
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.bar {
+    padding: 12px;
+    margin-top: 10px;
+    background: #1a2a44;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.bar:hover {
+    background: #2f4a75;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div id="userName"></div>
+    <button onclick="logout()">Logout</button>
+</header>
+
+<div class="container">
+
+    <div class="card">
+        <h2>Dashboard</h2>
+        <p>Welcome to SK Publication Appraisal System</p>
+    </div>
+
+    <div class="card">
+        <h3>Choose Employee to Rate</h3>
+        <div id="employeeList"></div>
+    </div>
+
+</div>
+
+<script>
+// Check login
+const user = localStorage.getItem("loggedInUser");
+
+if (!user) {
+    window.location.href = "index.html";
+}
+
+// Show logged-in user
+document.getElementById("userName").innerText = user;
+
+// Hierarchy
+const hierarchy = {
+    "Kritansh Abhi - CEO": ["Shresth Chohan - Co-CEO"],
+    "Shresth Chohan - Co-CEO": ["Yuvanshh Mishra - Comics Head"],
+    "Yuvanshh Mishra - Comics Head": ["Siddharth Singh - Comics Vice Head"],
+    "Siddharth Singh - Comics Vice Head": ["Dhruv Bhosale - Comics Manager"],
+    "Dhruv Bhosale - Comics Manager": ["Arnav Rege - Assistant Comic Head"],
+    "Arnav Rege - Assistant Comic Head": []
+};
+
+// Load employees
+const employees = hierarchy[user] || [];
+const listDiv = document.getElementById("employeeList");
+
+if (employees.length === 0) {
+    listDiv.innerHTML = "<p>No employees assigned.</p>";
+} else {
+    employees.forEach(emp => {
+        const div = document.createElement("div");
+        div.className = "bar";
+        div.innerText = emp;
+
+        div.onclick = () => {
+            // Redirect to separate form page with employee name
+            window.location.href = "form.html?emp=" + encodeURIComponent(emp);
+        };
+
+        listDiv.appendChild(div);
+    });
+}
+
+// Logout
+function logout() {
+    localStorage.removeItem("loggedInUser");
+    window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>
