@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Appraisal Form</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+
+        <h2>Appraisal Form</h2>
+
+        <p id="info"></p>
+
+        <p>Select Rating:</p>
+        <button onclick="setRating(1)">⭐</button>
+        <button onclick="setRating(2)">⭐⭐</button>
+        <button onclick="setRating(3)">⭐⭐⭐</button>
+        <button onclick="setRating(4)">⭐⭐⭐⭐</button>
+        <button onclick="setRating(5)">⭐⭐⭐⭐⭐</button>
+
+        <br><br>
+
+        <textarea id="comments" placeholder="Enter comments"></textarea>
+
+        <button onclick="submitForm()">Submit</button>
+
+    </div>
+</div>
+
+<script>
+const user = localStorage.getItem("currentUser");
+const emp = localStorage.getItem("selectedEmployee");
+
+document.getElementById("info").innerText =
+    "Reviewer: " + user + " | Employee: " + emp;
+
+let selectedRating = 0;
+
+function setRating(r) {
+    selectedRating = r;
+}
+
+function submitForm() {
+    if (selectedRating === 0) {
+        alert("Please select rating");
+        return;
+    }
+
+    const comments = document.getElementById("comments").value;
+
+    const data = {
+        reviewer: user,
+        employee: emp,
+        rating: selectedRating,
+        comments: comments,
+        date: new Date().toLocaleString()
+    };
+
+    let allData = JSON.parse(localStorage.getItem("appraisals")) || [];
+    allData.push(data);
+
+    localStorage.setItem("appraisals", JSON.stringify(allData));
+
+    window.location.href = "success.html";
+}
+</script>
+
+</body>
+</html>
