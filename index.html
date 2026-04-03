@@ -1,34 +1,68 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login</title>
+    <title>Login - SK Publication</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
-    <div class="card" style="text-align:center;">
-        <h2>SK Publication</h2>
-        <p>Choose Name</p>
 
+    <div class="card">
+        <h2>Login</h2>
+
+        <label>Select Name</label>
         <select id="userSelect">
-            <option value="Kritansh Abhi - CEO">Kritansh Abhi (CEO)</option>
-            <option value="Shresth Chohan - Co-CEO">Shresth Chohan (Co-CEO)</option>
-            <option value="Yuvanshh Mishra - Comics Head">Yuvanshh Mishra</option>
-            <option value="Siddharth Singh - Comics Vice Head">Siddharth Singh</option>
-            <option value="Dhruv Bhosale - Comics Manager">Dhruv Bhosale</option>
-            <option value="Arnav Rege - Assistant Comic Head">Arnav Rege</option>
+            <option value="">-- Select --</option>
+            <option value="Kritansh Abhi - CEO">Kritansh Abhi - CEO</option>
+            <option value="Shresth Chohan - Co-CEO">Shresth Chohan - Co-CEO</option>
+            <option value="Yuvanshh Mishra - Comics Head">Yuvanshh Mishra - Comics Head</option>
+            <option value="Siddharth Singh - Comics Vice Head">Siddharth Singh - Comics Vice Head</option>
+            <option value="Dhruv Bhosale - Comics Manager">Dhruv Bhosale - Comics Manager</option>
+            <option value="Arnav Rege - Assistant Comic Head">Arnav Rege - Assistant Comic Head</option>
         </select>
 
+        <br><br>
+
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Enter password">
+
+        <br><br>
+
         <button onclick="login()">Login</button>
+
+        <p id="error" style="color:red;"></p>
     </div>
+
 </div>
 
 <script>
+// Passwords for each user
+const credentials = {
+    "Kritansh Abhi - CEO": "ceo123",
+    "Shresth Chohan - Co-CEO": "co123",
+    "Yuvanshh Mishra - Comics Head": "head123",
+    "Siddharth Singh - Comics Vice Head": "vice123",
+    "Dhruv Bhosale - Comics Manager": "manager123",
+    "Arnav Rege - Assistant Comic Head": "assistant123"
+};
+
 function login() {
     const user = document.getElementById("userSelect").value;
-    localStorage.setItem("currentUser", user);
-    window.location.href = "appraisal.html";
+    const pass = document.getElementById("password").value;
+    const error = document.getElementById("error");
+
+    if (!user || !pass) {
+        error.innerText = "Please select user and enter password";
+        return;
+    }
+
+    if (credentials[user] === pass) {
+        localStorage.setItem("currentUser", user);
+        window.location.href = "appraisal.html";
+    } else {
+        error.innerText = "Invalid credentials";
+    }
 }
 </script>
 
