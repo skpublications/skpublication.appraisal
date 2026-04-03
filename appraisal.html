@@ -13,13 +13,9 @@
 
         <h3>Choose Employee to Rate</h3>
 
-        <select id="employeeSelect">
-            <option value="Shresth Chohan">Shresth Chohan</option>
-            <option value="Yuvanshh Mishra">Yuvanshh Mishra</option>
-            <option value="Siddharth Singh">Siddharth Singh</option>
-            <option value="Dhruv Bhosale">Dhruv Bhosale</option>
-            <option value="Arnav Rege">Arnav Rege</option>
-        </select>
+        <select id="employeeSelect"></select>
+
+        <br><br>
 
         <button onclick="goToForm()">Rate Employee</button>
     </div>
@@ -33,10 +29,40 @@
 
 <script>
 const user = localStorage.getItem("currentUser");
+
+if (!user) {
+    window.location.href = "index.html";
+}
+
 document.getElementById("welcome").innerText = "Logged in as: " + user;
 
+// Role permissions
+const permissions = {
+    "Shresth Chohan - Co-CEO": ["Yuvanshh Mishra"],
+    "Yuvanshh Mishra - Comics Head": ["Siddharth Singh", "Dhruv Bhosale"],
+    "Siddharth Singh - Comics Vice Head": ["Dhruv Bhosale", "Arnav Rege"],
+    "Dhruv Bhosale - Comics Manager": ["Arnav Rege"],
+    "Arnav Rege - Assistant Comic Head": ["Dhruv Bhosale"]
+};
+
+const select = document.getElementById("employeeSelect");
+
+// Populate dropdown
+if (permissions[user]) {
+    permissions[user].forEach(emp => {
+        const option = document.createElement("option");
+        option.value = emp;
+        option.textContent = emp;
+        select.appendChild(option);
+    });
+} else {
+    select.innerHTML = "<option>No employees assigned</option>";
+}
+
 function goToForm() {
-    const emp = document.getElementById("employeeSelect").value;
+    const emp = select.value;
+    if (!emp) return;
+
     localStorage.setItem("selectedEmployee", emp);
     window.location.href = "form.html";
 }
