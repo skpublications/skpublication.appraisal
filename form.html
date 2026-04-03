@@ -3,65 +3,109 @@
 <head>
     <title>Appraisal Form</title>
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        .stars {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            font-size: 30px;
+        }
+
+        .stars input {
+            display: none;
+        }
+
+        .stars label {
+            cursor: pointer;
+            color: lightgray;
+        }
+
+        .stars input:checked ~ label {
+            color: gold;
+        }
+
+        .stars label:hover,
+        .stars label:hover ~ label {
+            color: gold;
+        }
+    </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="card">
 
+    <div class="card">
         <h2>Appraisal Form</h2>
 
-        <p id="info"></p>
+        <p id="employeeName"></p>
 
-        <p>Select Rating:</p>
-        <button onclick="setRating(1)">⭐</button>
-        <button onclick="setRating(2)">⭐⭐</button>
-        <button onclick="setRating(3)">⭐⭐⭐</button>
-        <button onclick="setRating(4)">⭐⭐⭐⭐</button>
-        <button onclick="setRating(5)">⭐⭐⭐⭐⭐</button>
+        <form onsubmit="submitForm(event)">
 
-        <br><br>
+            <label>Rating</label>
+            <div class="stars">
+                <input type="radio" name="rating" id="star5" value="5">
+                <label for="star5">★</label>
 
-        <textarea id="comments" placeholder="Enter comments"></textarea>
+                <input type="radio" name="rating" id="star4" value="4">
+                <label for="star4">★</label>
 
-        <button onclick="submitForm()">Submit</button>
+                <input type="radio" name="rating" id="star3" value="3">
+                <label for="star3">★</label>
 
+                <input type="radio" name="rating" id="star2" value="2">
+                <label for="star2">★</label>
+
+                <input type="radio" name="rating" id="star1" value="1">
+                <label for="star1">★</label>
+            </div>
+
+            <br>
+
+            <label>Comments</label>
+            <textarea id="comments" required></textarea>
+
+            <br><br>
+
+            <button type="submit">Submit</button>
+
+        </form>
     </div>
+
 </div>
 
 <script>
-const user = localStorage.getItem("currentUser");
-const emp = localStorage.getItem("selectedEmployee");
+const employee = localStorage.getItem("selectedEmployee");
+const reviewer = localStorage.getItem("currentUser");
 
-document.getElementById("info").innerText =
-    "Reviewer: " + user + " | Employee: " + emp;
-
-let selectedRating = 0;
-
-function setRating(r) {
-    selectedRating = r;
+if (!employee || !reviewer) {
+    window.location.href = "index.html";
 }
 
-function submitForm() {
-    if (selectedRating === 0) {
-        alert("Please select rating");
+document.getElementById("employeeName").innerText = "Rating: " + employee;
+
+function submitForm(e) {
+    e.preventDefault();
+
+    const rating = document.querySelector('input[name="rating"]:checked');
+    const comments = document.getElementById("comments").value;
+
+    if (!rating) {
+        alert("Please select a rating");
         return;
     }
 
-    const comments = document.getElementById("comments").value;
+    const data = JSON.parse(localStorage.getItem("appraisals")) || [];
 
-    const data = {
-        reviewer: user,
-        employee: emp,
-        rating: selectedRating,
+    data.push({
+        employee: employee,
+        reviewer: reviewer,
+        rating: rating.value,
         comments: comments,
         date: new Date().toLocaleString()
-    };
+    });
 
-    let allData = JSON.parse(localStorage.getItem("appraisals")) || [];
-    allData.push(data);
-
-    localStorage.setItem("appraisals", JSON.stringify(allData));
+    localStorage.setItem("appraisals", JSON.stringify(data));
 
     window.location.href = "success.html";
 }
