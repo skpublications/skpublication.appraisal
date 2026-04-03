@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="card" style="text-align:center;">
+        <h2>SK Publication</h2>
+        <p>Choose Name</p>
+
+        <select id="userSelect">
+            <option value="Kritansh Abhi - CEO">Kritansh Abhi (CEO)</option>
+            <option value="Shresth Chohan - Co-CEO">Shresth Chohan (Co-CEO)</option>
+            <option value="Yuvanshh Mishra - Comics Head">Yuvanshh Mishra</option>
+            <option value="Siddharth Singh - Comics Vice Head">Siddharth Singh</option>
+            <option value="Dhruv Bhosale - Comics Manager">Dhruv Bhosale</option>
+            <option value="Arnav Rege - Assistant Comic Head">Arnav Rege</option>
+        </select>
+
+        <button onclick="login()">Login</button>
+    </div>
+</div>
+
+<script>
+function login() {
+    const user = document.getElementById("userSelect").value;
+    localStorage.setItem("currentUser", user);
+    window.location.href = "appraisal.html";
+}
+</script>
+
+</body>
+</html>
