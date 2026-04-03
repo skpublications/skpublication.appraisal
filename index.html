@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SK Publication Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #1a2a44, #2f4a75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.login-box {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 350px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #1a2a44;
+}
+select, input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    background: #1a2a44;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+button:hover {
+    background: #2f4a75;
+}
+.error {
+    color: red;
+    margin-top: 10px;
+    display: none;
+    text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-box">
+    <h2>SK Publication Login</h2>
+
+    <select id="user">
+        <option value="">Select Name</option>
+        <option>Kritansh Abhi - CEO</option>
+        <option>Shresth Chohan - Co-CEO</option>
+        <option>Yuvanshh Mishra - Comics Head</option>
+        <option>Siddharth Singh - Comics Vice Head</option>
+        <option>Dhruv Bhosale - Comics Manager</option>
+        <option>Arnav Rege - Assistant Comic Head</option>
+    </select>
+
+    <input type="password" id="pass" placeholder="Enter Password">
+
+    <button onclick="login()">Login</button>
+
+    <div class="error" id="errorMsg">Invalid Login</div>
+</div>
+
+<script>
+function login() {
+    const user = document.getElementById("user").value;
+    const pass = document.getElementById("pass").value;
+
+    // Simple passwords (you can change these)
+    const users = {
+        "Kritansh Abhi - CEO": "ceo123",
+        "Shresth Chohan - Co-CEO": "coceo123",
+        "Yuvanshh Mishra - Comics Head": "head123",
+        "Siddharth Singh - Comics Vice Head": "vice123",
+        "Dhruv Bhosale - Comics Manager": "manager123",
+        "Arnav Rege - Assistant Comic Head": "assistant123"
+    };
+
+    if (users[user] === pass) {
+        localStorage.setItem("loggedInUser", user);
+        window.location.href = "appraisal.html"; // next page
+    } else {
+        document.getElementById("errorMsg").style.display = "block";
+    }
+}
+</script>
+
+</body>
+</html>
