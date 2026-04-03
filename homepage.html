@@ -1,120 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>SK Publication Dashboard</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: #eef2f7;
-}
-
-header {
-    background: #1a2a44;
-    color: white;
-    padding: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.container {
-    padding: 20px;
-}
-
-.card {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    margin-top: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.bar {
-    padding: 12px;
-    margin-top: 10px;
-    background: #1a2a44;
-    color: white;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.bar:hover {
-    background: #2f4a75;
-}
-</style>
+    <title>Dashboard</title>
 </head>
-
 <body>
 
-<header>
-    <div id="userName"></div>
-    <button onclick="logout()">Logout</button>
-</header>
+<h2 id="welcome"></h2>
 
-<div class="container">
+<div>
+    <h3>Choose Employee to Rate</h3>
 
-    <div class="card">
-        <h2>Dashboard</h2>
-        <p>Welcome to SK Publication Appraisal System</p>
-    </div>
+    <select id="employeeSelect">
+        <option value="Shresth Chohan">Shresth Chohan</option>
+        <option value="Yuvanshh Mishra">Yuvanshh Mishra</option>
+        <option value="Siddharth Singh">Siddharth Singh</option>
+        <option value="Dhruv Bhosale">Dhruv Bhosale</option>
+        <option value="Arnav Rege">Arnav Rege</option>
+    </select>
 
-    <div class="card">
-        <h3>Choose Employee to Rate</h3>
-        <div id="employeeList"></div>
-    </div>
+    <br><br>
+    <button onclick="goToForm()">Rate</button>
+</div>
 
+<hr>
+
+<div id="adminPanel" style="display:none;">
+    <h3>CEO Panel - All Ratings</h3>
+    <div id="ratingsList"></div>
 </div>
 
 <script>
-// Check login
-const user = localStorage.getItem("loggedInUser");
+const user = localStorage.getItem("currentUser");
+document.getElementById("welcome").innerText = "Logged in as: " + user;
 
-if (!user) {
-    window.location.href = "index.html";
+function goToForm() {
+    const emp = document.getElementById("employeeSelect").value;
+    localStorage.setItem("selectedEmployee", emp);
+    window.location.href = "form.html";
 }
 
-// Show logged-in user
-document.getElementById("userName").innerText = user;
+// CEO view
+if (user === "Kritansh Abhi - CEO") {
+    document.getElementById("adminPanel").style.display = "block";
 
-// Hierarchy
-const hierarchy = {
-    "Kritansh Abhi - CEO": ["Shresth Chohan - Co-CEO"],
-    "Shresth Chohan - Co-CEO": ["Yuvanshh Mishra - Comics Head"],
-    "Yuvanshh Mishra - Comics Head": ["Siddharth Singh - Comics Vice Head"],
-    "Siddharth Singh - Comics Vice Head": ["Dhruv Bhosale - Comics Manager"],
-    "Dhruv Bhosale - Comics Manager": ["Arnav Rege - Assistant Comic Head"],
-    "Arnav Rege - Assistant Comic Head": []
-};
+    const data = JSON.parse(localStorage.getItem("appraisals")) || [];
+    const list = document.getElementById("ratingsList");
 
-// Load employees
-const employees = hierarchy[user] || [];
-const listDiv = document.getElementById("employeeList");
+    if (data.length === 0) {
+        list.innerHTML = "<p>No submissions yet</p>";
+    } else {
+        data.forEach(item => {
+            const div = document.createElement("div");
+            div.style.border = "1px solid black";
+            div.style.margin = "10px";
+            div.style.padding = "10px";
 
-if (employees.length === 0) {
-    listDiv.innerHTML = "<p>No employees assigned.</p>";
-} else {
-    employees.forEach(emp => {
-        const div = document.createElement("div");
-        div.className = "bar";
-        div.innerText = emp;
+            div.innerHTML = `
+                <b>Employee:</b> ${item.employee}<br>
+                <b>Reviewer:</b> ${item.reviewer}<br>
+                <b>Rating:</b> ⭐ ${item.rating}<br>
+                <b>Comments:</b> ${item.comments}<br>
+                <b>Date:</b> ${item.date}
+            `;
 
-        div.onclick = () => {
-            // Redirect to separate form page with employee name
-            window.location.href = "form.html?emp=" + encodeURIComponent(emp);
-        };
-
-        listDiv.appendChild(div);
-    });
-}
-
-// Logout
-function logout() {
-    localStorage.removeItem("loggedInUser");
-    window.location.href = "index.html";
+            list.appendChild(div);
+        });
+    }
 }
 </script>
 
