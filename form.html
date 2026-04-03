@@ -1,139 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>Appraisal Form</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: #eef2f7;
-}
-
-header {
-    background: #1a2a44;
-    color: white;
-    padding: 15px;
-    display: flex;
-    justify-content: space-between;
-}
-
-.container {
-    max-width: 500px;
-    margin: 40px auto;
-    background: white;
-    padding: 25px;
-    border-radius: 10px;
-}
-
-.stars {
-    display: flex;
-    gap: 10px;
-    font-size: 30px;
-    cursor: pointer;
-}
-
-.star {
-    color: #ccc;
-}
-
-.star.selected {
-    color: gold;
-}
-
-button {
-    margin-top: 15px;
-    width: 100%;
-    padding: 12px;
-    background: #1a2a44;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-}
-</style>
+    <title>SK Publication - Login</title>
 </head>
-
 <body>
 
-<header>
-    <div id="userName"></div>
-    <button onclick="logout()">Logout</button>
-</header>
+<h2>Choose Name</h2>
 
-<div class="container">
+<select id="userSelect">
+    <option value="Kritansh Abhi - CEO">Kritansh Abhi (CEO)</option>
+    <option value="Shresth Chohan - Co-CEO">Shresth Chohan (Co-CEO)</option>
+    <option value="Yuvanshh Mishra - Comics Head">Yuvanshh Mishra (Comics Head)</option>
+    <option value="Siddharth Singh - Comics Vice Head">Siddharth Singh (Comics Vice Head)</option>
+    <option value="Dhruv Bhosale - Comics Manager">Dhruv Bhosale (Comics Manager)</option>
+    <option value="Arnav Rege - Assistant Comic Head">Arnav Rege (Assistant Comic Head)</option>
+</select>
 
-    <h2>Appraisal Form</h2>
-    <p id="employeeInfo"></p>
-
-    <h3>Rating</h3>
-    <div class="stars" id="stars">
-        <span class="star" data-value="1">★</span>
-        <span class="star" data-value="2">★</span>
-        <span class="star" data-value="3">★</span>
-        <span class="star" data-value="4">★</span>
-        <span class="star" data-value="5">★</span>
-    </div>
-
-    <textarea id="comments" placeholder="Comments" style="width:100%; margin-top:15px; padding:10px;"></textarea>
-
-    <button onclick="submitForm()">Submit</button>
-
-</div>
+<br><br>
+<button onclick="login()">Login</button>
 
 <script>
-const user = localStorage.getItem("loggedInUser");
-if (!user) window.location.href = "index.html";
-
-document.getElementById("userName").innerText = user;
-
-// Get employee from URL
-const params = new URLSearchParams(window.location.search);
-const emp = params.get("emp");
-document.getElementById("employeeInfo").innerText = "Employee: " + emp;
-
-// Star rating logic
-let selectedRating = 0;
-const stars = document.querySelectorAll(".star");
-
-stars.forEach(star => {
-    star.addEventListener("click", () => {
-        selectedRating = star.getAttribute("data-value");
-
-        stars.forEach(s => s.classList.remove("selected"));
-        for (let i = 0; i < selectedRating; i++) {
-            stars[i].classList.add("selected");
-        }
-    });
-});
-
-function submitForm() {
-    const comments = document.getElementById("comments").value;
-
-    if (selectedRating == 0) {
-        alert("Please select a rating");
-        return;
-    }
-
-    const data = {
-        reviewer: user,
-        employee: emp,
-        rating: selectedRating,
-        comments: comments,
-        date: new Date()
-    };
-
-    console.log("Submitted:", data);
-
-    // Redirect to success page
-    window.location.href = "success.html";
-}
-
-function logout() {
-    localStorage.removeItem("loggedInUser");
-    window.location.href = "index.html";
+function login() {
+    const user = document.getElementById("userSelect").value;
+    localStorage.setItem("currentUser", user);
+    window.location.href = "appraisal.html";
 }
 </script>
 
